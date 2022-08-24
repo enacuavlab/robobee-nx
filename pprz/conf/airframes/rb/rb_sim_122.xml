@@ -1,0 +1,11 @@
+<airframe>
+    
+  <include href="conf/airframes/ENAC/quadrotor/rb/rb_stabindifull_$AC_ID.xml"/>    
+  <section name="SIMULATOR" prefix="NPS_">
+    <define name="ACTUATOR_NAMES" value="ne_motor, se_motor, sw_motor, nw_motor" type="string[]"/>
+    <define name="JSBSIM_MODEL" value="bebop2" type="string"/>
+    <define name="SENSORS_PARAMS" value="nps_sensors_params_default.h" type="string"/>
+    <define name="NO_MOTOR_MIXING" value="TRUE"/>
+  </section>
+   
+</airframe>  

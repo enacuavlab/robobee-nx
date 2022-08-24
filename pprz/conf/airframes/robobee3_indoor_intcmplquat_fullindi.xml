@@ -1,0 +1,98 @@
+<!DOCTYPE airframe SYSTEM "../../airframe.dtd">
+
+<airframe name="Explorer">
+
+  <firmware name="rotorcraft">
+
+    <configure name="PERIODIC_FREQUENCY" value="512"/>
+    <configure name="AHRS_PROPAGATE_FREQUENCY" value="$(PERIODIC_FREQUENCY)"/>
+  
+    <target name="ap" board="tawaki_1.1">
+      <module name="radio_control" type="sbus"/>
+      <define name="RADIO_KILL_SWITCH" value="RADIO_GAIN1"/>
+      <configure name="BARO_PERIODIC_FREQUENCY" value="50"/>
+
+      <module name="gps" type="datalink"/>
+      <configure name="USE_MAGNETOMETER" value="FALSE"/>
+
+      <define name="AHRS_USE_GPS_HEADING"   value="TRUE"/>
+      <define name="AHRS_HEADING_UPDATE_GPS_MIN_SPEED" value="0"/>
+
+      <module name="ins" type="gps_passthrough"/>
+    </target>
+    
+    <target name="nps" board="pc">
+      <module name="fdm" type="jsbsim"/>
+      <module name="radio_control" type="datalink"/>
+
+      <define name="INDI_RPM_FEEDBACK" value="FALSE"/>
+
+      <module name="gps" type="datalink"/>
+      <configure name="USE_MAGNETOMETER" value="TRUE"/>
+
+      <define name="AHRS_USE_GPS_HEADING" value="FALSE"/>
+      
+      <!--  Toulouse  -->
+      <define name="AHRS_H_X" value="0.513081"/>
+      <define name="AHRS_H_Y" value="-0.00242783"/>
+      <define name="AHRS_H_Z" value="0.858336"/>
+
+      <module name="ins" type="extended"/>
+    </target>
+
+
+    <module name="telemetry" type="xbee_api"/>
+
+    <module name="board" type="tawaki">
+      <define name="IMU_MPU_LOWPASS_FILTER" value="MPU60X0_DLPF_256HZ"/>
+      <define name="IMU_MPU_ACCEL_LOWPASS_FILTER" value="MPU60X0_DLPF_ACC_218HZ"/>
+      <define name="IMU_MPU_SMPLRT_DIV" value="0"/>
+    </module>
+
+    <module name="tlsf"/>
+    <module name="pprzlog"/>
+    <module name="logger" type="sd_chibios"/>
+
+
+    <module name="fc_rotor">
+      <define name="FCROTOR_STARTED" value="FALSE"/>
+    </module>
+
+    <!--Tawaki -->
+    <module name="extra_dl">
+      <configure name="EXTRA_DL_PORT" value="UART7"/>
+      <configure name="EXTRA_DL_BAUD" value="B115200"/>
+    </module>
+
+    <module name="actuators" type="dshot"/>
+
+    <module name="ahrs" type="int_cmpl_quat"/>
+
+    <module name="stabilization" type="indi"/>
+    <module name="guidance" type="indi">
+      <define name="GUIDANCE_INDI_SPEED_GAIN" value="3.0"/>
+      <define name="GUIDANCE_INDI_SPECIFIC_FORCE_GAIN" value="-500.0"/>
+      <define name="GUIDANCE_INDI_THRUST_DYNAMICS" value="0.03"/>
+      <define name="GUIDANCE_INDI_RC_DEBUG" value="FALSE"/>
+    </module>
+
+  </firmware>
+
+  <include href="conf/airframes/ENAC/quadrotor/rb/rb_actu_$AC_ID.xml"/>
+
+  <include href="conf/airframes/ENAC/quadrotor/rb/rb_imu_$AC_ID.xml"/>
+
+  <include href="conf/airframes/ENAC/quadrotor/rb/rb_stabcom_$AC_ID.xml"/>
+  
+  <include href="conf/airframes/ENAC/quadrotor/rb/rb_stabindifull_$AC_ID.xml"/>
+
+  <include href="conf/airframes/ENAC/quadrotor/rb/rb_sim_$AC_ID.xml"/>
+
+  <include href="conf/airframes/ENAC/quadrotor/rb/rb_guid_$AC_ID.xml"/>
+
+  <include href="conf/airframes/ENAC/quadrotor/rb/rb_cmd.xml"/>
+  
+  <include href="conf/airframes/ENAC/quadrotor/rb/rb_com.xml"/>
+ 
+
+</airframe>

@@ -1,0 +1,10 @@
+<airframe>
+    
+  <servos driver="DShot">
+    <servo name="FR" no="1" min="0" neutral="100" max="2000"/>
+    <servo name="BR" no="2" min="0" neutral="100" max="2000"/>
+    <servo name="BL" no="3" min="0" neutral="100" max="2000"/>
+    <servo name="FL" no="4" min="0" neutral="100" max="2000"/>
+  </servos>
+   
+</airframe>  
