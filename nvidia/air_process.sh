@@ -21,11 +21,16 @@ sleep 1
 IP="127.0.0.1"
 PORT=5600
 DEV="/dev/video"$VIDEO_NBR
-WIDTH=1280
-HEIGHT=720
+
 FPS=10
 BITRATE=300000
-CAPS="video/x-raw(memory:NVMM),width=$WIDTH,height=$HEIGHT,framerate=$FPS/1,format=NV12"
+
+WIDTH_1=3264
+HEIGHT_1=2464
+CAPS_1="video/x-raw(memory:NVMM),width=$WIDTH_1,height=$HEIGHT_1,framerate=$FPS/1,format=NV12"
+WIDTH_2=1280
+HEIGHT_2=720
+CAPS_2="video/x-raw(memory:NVMM),width=$WIDTH_2,height=$HEIGHT_2,framerate=$FPS/1,format=NV12"
 
 #gst-launch-1.0 nvarguscamerasrc ! $CAPS ! nvvidconv flip-method=2 ! $CAPS ! nvvidconv !  video/x-raw,format=BGRx ! videoconvert ! video/x-raw,format=I420 ! v4l2sink device=$DEV  2>&1 &
 #echo $! >> $PIDFILE
@@ -36,13 +41,17 @@ CAPS="video/x-raw(memory:NVMM),width=$WIDTH,height=$HEIGHT,framerate=$FPS/1,form
 #gst-launch-1.0 nvarguscamerasrc ! $CAPS ! nvvidconv flip-method=2 ! $CAPS ! tee name=t t. ! queue ! nvv4l2h265enc insert-sps-pps=true bitrate=$BITRATE  ! h265parse ! rtph265pay pt=96 config-interval=1 ! udpsink host=$IP port=$PORT t. ! queue ! nvvidconv !  video/x-raw,format=BGRx ! videoconvert ! video/x-raw,format=I420 ! v4l2sink device=$DEV 2>&1 &
 #echo $! >> $PIDFILE
 
-#sleep 1
+# Get height resolution from camera, for image processing, and convert to a lower reolution for transmission
+gst-launch-1.0 nvarguscamerasrc ! $CAPS_1 !  tee name=t t. ! queue ! nvvidconv flip-method=2 ! $CAPS_2 ! nvv4l2h265enc insert-sps-pps=true bitrate=$BITRATE  ! h265parse ! rtph265pay pt=96 config-interval=1 ! udpsink host=$IP port=$PORT t. ! queue ! nvvidconv flip-method=2 !  video/x-raw,format=BGRx ! videoconvert ! video/x-raw,format=I420 ! v4l2sink device=$DEV 2>&1 &
+echo $! >> $PIDFILE
+
+sleep 1
 
 #/usr/bin/python3 /home/pprz/Projects/imav2022/onboard_image_proc_and_stream.py 2>&1 &
 #echo $! >> $PIDFILE
 
-#/usr/bin/python3 /home/pprz/Projects/imav2022/onboard_proc.py $WIDTH $HEIGHT $DEV 2>&1 &
-#echo $! >> $PIDFILE
+/usr/bin/python3 /home/pprz/Projects/imav2022/onboard_proc.py $WIDTH_1 $HEIGHT_1 $DEV 2>&1 &
+echo $! >> $PIDFILE
 
 # CALIBRATION 
 ##############
@@ -55,9 +64,9 @@ CAPS="video/x-raw(memory:NVMM),width=$WIDTH,height=$HEIGHT,framerate=$FPS/1,form
 #HEIGHT=1232
 #FPS=10
 
-WIDTH=1920
-HEIGHT=1080
-FPS=10
+#WIDTH=1920
+#HEIGHT=1080
+#FPS=10
 
 #WIDTH=3264
 #HEIGHT=1848
@@ -67,5 +76,5 @@ FPS=10
 #HEIGHT=2464
 #FPS=10
 
-/home/pprz/Projects/imav2022/camera_calibration_capture.sh $WIDTH $HEIGHT $FPS $IP $PORT  2>&1 &
-echo $! >> $PIDFILE
+#/home/pprz/Projects/imav2022/camera_calibration_capture.sh $WIDTH $HEIGHT $FPS $IP $PORT  2>&1 &
+#echo $! >> $PIDFILE

@@ -15,6 +15,7 @@ import cv2
 import numpy as np
 import threading
 import time
+import socket
 
 #aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
 #aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_5X5_100) 
@@ -23,6 +24,10 @@ aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_5X5_250)
 MARKER_SIZE=200
 
 SERIALDEV='/dev/ttyTHS1'
+
+CLIENT_IP="127.0.0.1"
+CLIENT_PORT=4250
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 def camera_calibration(calib_file):
   f = cv2.FileStorage(calib_file,cv2.FILE_STORAGE_READ)
@@ -68,8 +73,12 @@ def thread_aruco_function(cond,thread_pprz,matrix,coeff):
             msg['climb']= 0
             msg['course']= 0
             thread_pprz.send(msg, 0)
-            print("TARGET_POS %d %d %.2f %.2f %.2f %d %d %d"
-              %(msg['ac_id'],msg['target_id'],msg['lat'],msg['lon'], msg['alt'] ,msg['speed'],msg['climb'],msg['course']))
+            msgbuff="[TARGET_POS %d %d %.2f %.2f %.2f %d %d %d]\n"\
+              %(msg['ac_id'],msg['target_id'],msg['lat'],msg['lon'], msg['alt'] ,msg['speed'],msg['climb'],msg['course'])
+            sock.sendto(msgbuff.encode(), (CLIENT_IP, CLIENT_PORT))
+            print(msgbuff)
+            #print("TARGET_POS %d %d %.2f %.2f %.2f %d %d %d"
+            #  %(msg['ac_id'],msg['target_id'],msg['lat'],msg['lon'], msg['alt'] ,msg['speed'],msg['climb'],msg['course']))
 
 
 if __name__ == '__main__':
@@ -88,8 +97,8 @@ if __name__ == '__main__':
   thread_cam  = threading.Thread(target=thread_cam_function, args=(cond,cam,))
   thread_cam.start()
 
-#  matrix,coeff = camera_calibration("/home/pprz/Projects/imav2022/calib_"+width+"x"+height+"/calibration.xml")
-  matrix,coeff = camera_calibration("/home/pprz/tmp2/calib_"+width+"x"+height+"/calibration.xml")
+  matrix,coeff = camera_calibration("/home/pprz/Projects/imav2022/calibration/calib_"+width+"x"+height+"/calibration.xml")
+#  matrix,coeff = camera_calibration("/home/pprz/tmp2/calib_"+width+"x"+height+"/calibration.xml")
   thread_aruco = threading.Thread(target=thread_aruco_function, args=(cond,thread_pprz,matrix,coeff,))
   thread_aruco.start()
 
