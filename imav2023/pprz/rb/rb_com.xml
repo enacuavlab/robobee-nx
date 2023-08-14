@@ -1,0 +1,35 @@
+<airframe>
+    
+  <commands>
+    <axis name="ROLL"   failsafe_value="0"/>
+    <axis name="PITCH"  failsafe_value="0"/>
+    <axis name="YAW"    failsafe_value="0"/>
+    <axis name="THRUST" failsafe_value="0"/>
+  </commands>
+  
+  <section name="NAV">
+    <define name="ARRIVED_AT_WAYPOINT" value="0.25"/>
+    <define name="NAV_DESCEND_VSPEED" value="-0.5"/>
+    <define name="NAV_CLIMB_VSPEED" value="0.5"/>
+  </section>
+
+  <section name="BAT">
+    <define name="FAILSAFE_ON_BAT_CRITICAL" value="TRUE"/>
+    <define name="CRITIC_BAT_LEVEL" value="9.5" unit="V"/>
+  </section> 
+
+  <section name="AUTOPILOT">
+    <define name="MODE_STARTUP" value="AP_MODE_NAV"/>
+    <define name="MODE_MANUAL" value="AP_MODE_ATTITUDE_DIRECT"/>
+    <define name="MODE_AUTO1" value="AP_MODE_GUIDED"/>
+    <define name="MODE_AUTO2" value="AP_MODE_NAV"/>
+    <define name="FAILSAFE_DESCENT_SPEED" value="0.5"/>
+  </section> 
+
+  <section name="GCS">
+    <define name="ALT_SHIFT_PLUS_PLUS" value="5"/>
+    <define name="ALT_SHIFT_PLUS" value="1"/>
+    <define name="ALT_SHIFT_MINUS" value="-1"/>
+  </section>
+  
+</airframe>  

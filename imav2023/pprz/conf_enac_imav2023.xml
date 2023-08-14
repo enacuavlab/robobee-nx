@@ -1,0 +1,13 @@
+<conf>
+  <aircraft
+   name="Robobee3_122"
+   ac_id="122"
+   airframe="airframes/ENAC/imav2023/robobee3_outdoor_intcmplquat_fullindi.xml"
+   radio="radios/FrSky_X-Lite.xml"
+   telemetry="telemetry/default_rotorcraft.xml"
+   flight_plan="flight_plans/rotorcraft_basic.xml"
+   settings="settings/rotorcraft_basic.xml"
+   settings_modules="modules/ahrs_int_cmpl_quat.xml modules/gps.xml modules/guidance_indi.xml modules/guidance_rotorcraft.xml modules/imu_common.xml modules/ins_extended.xml modules/logger_sd_chibios.xml modules/nav_basic_rotorcraft.xml modules/stabilization_indi.xml"
+   gui_color="blue"
+  />
+</conf>
