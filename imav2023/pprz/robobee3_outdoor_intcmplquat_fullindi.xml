@@ -60,7 +60,7 @@
 
     <!--Tawaki -->
     <module name="extra_dl">
-      <configure name="EXTRA_DL_PORT" value="UART7"/>
+      <configure name="EXTRA_DL_PORT" value="UART3"/>
       <configure name="EXTRA_DL_BAUD" value="B115200"/>
     </module>
 

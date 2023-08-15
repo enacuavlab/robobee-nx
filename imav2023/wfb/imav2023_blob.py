@@ -52,8 +52,8 @@ def thread_cam_function(cond,cam):
 
 def thread_blob_function(cond,lock,out):
   global img,sock
-  hsv_low = (107,0,0)
-  hsv_high = (179,255,255)
+  hsv_low = (104,91,72)
+  hsv_high = (179,255,110)
   while True:
     with cond:
       cond.wait()

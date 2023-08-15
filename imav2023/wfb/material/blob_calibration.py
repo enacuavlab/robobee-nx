@@ -3,7 +3,7 @@
 '''
 Usage
 ./blob_calibration.py dummy/IMG_1380.jpg 
-./blob_calibration.py dummy/IMG_1380.jpg 107 179 0 255 0 255
+./blob_calibration.py dummy/IMG_1380.jpg 104 179 91 255 72 110
 '''
 import cv2
 import sys
