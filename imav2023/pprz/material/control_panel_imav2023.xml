@@ -14,7 +14,7 @@
         <arg flag="-d" constant="/dev/ttyUSB0"/>
         <arg flag="-t" constant="xbee"/>
         <arg flag="-s" constant="57600"/>
-        <arg flag="-ac" constant="2:127.0.0.1:4244:4245"/>
+        <arg flag="-ac" constant="122:127.0.0.1:4244:4245"/>
       </program>
       <program name="Server"/>
       <program name="PprzGCS"/>
