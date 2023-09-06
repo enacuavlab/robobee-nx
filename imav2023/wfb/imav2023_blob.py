@@ -84,6 +84,7 @@ def thread_blob_function(cond,lock,out):
       img2 = img.copy()
       hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
       mask = None
+      msg = ""
 
       for th in hsv_th:
         hsv_min = np.array(th[0])
@@ -125,13 +126,10 @@ def thread_blob_function(cond,lock,out):
       if best_res is not None:
          center = (int(best_res[0][0]), int(best_res[0][1]))
          cv2.circle(img2, center, 50, (0, 255, 0), 5)
-         cv2.putText(img2, f"BLUE_{cnt}", (center[0]+60, center[1]), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0))
-         box = cv2.boxPoints(best_res)
-         ctr = np.array(box).reshape((-1,1,2)).astype(np.int32)
-         mask = np.zeros((img.shape[0], img.shape[1], 1), np.uint8)
-         cv2.drawContours(mask, [ctr], -1, (255,255,255),-1)
-         img = cv2.bitwise_and(img,img,mask = cv2.bitwise_not(mask))
-         out.write(img2)
+         msg = "["+str(int(best_res[0][0]))+","+str(int(best_res[0][1]))+"] "+param+"\n"
+         sock.sendto(msg.encode(), (LOCAL_IP, WFB_PORT))
+
+      out.write(img2)
 
 
 def proccess_pprz_msg(sender,address,msg,length,receiver_id=None, component_id=None):

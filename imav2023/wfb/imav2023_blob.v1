@@ -52,8 +52,8 @@ def thread_cam_function(cond,cam):
 
 def thread_blob_function(cond,lock,out):
   global img,sock
-  hsv_low = (107,0,0)
-  hsv_high = (179,255,255)
+  hsv_low = np.array([93,90,0])
+  hsv_high = np.array([138,255,255])
   while True:
     with cond:
       cond.wait()
@@ -67,14 +67,15 @@ def thread_blob_function(cond,lock,out):
       contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
       contours = sorted(contours, key=cv2.contourArea, reverse=True)
       counter = 0
-      msg=""
+      msg="["
       for contour in contours[:3]:
         x, y, w, h = cv2.boundingRect(contour)
         cv2.rectangle(img2, (x, y), (x + w, y + h), (0, 255, 0), 3)
-        msg += "    ["+str(counter)+param+str(x)+str(y)+str(w)+str(h)+"]"
+        msg += " "+str(counter)+"("+str(x)+","+str(y)+")"
         counter += 1
       out.write(img2)
-      if msg:
+      if counter!=0 :
+        msg+=" ] "+param
         print(msg)
         msg+="\n"
         sock.sendto(msg.encode(), (LOCAL_IP, WFB_PORT))
